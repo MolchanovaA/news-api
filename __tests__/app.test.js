@@ -41,3 +41,37 @@ describe("task 2. GET /api/topics", () => {
       });
   });
 });
+
+describe("task 3. GET /api", () => {
+  test("GET 200 /api. Has to return a JSON file. Each obj has to have description property", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body: { listOfEndpoints } }) => {
+        let isJson;
+        try {
+          JSON.parse(listOfEndpoints);
+          isJson = true;
+        } catch {
+          isJson = false;
+        }
+
+        expect(isJson).toBe(true);
+      });
+  });
+
+  test("GET 200 /api. Each obj has to have description,  property", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body: { listOfEndpoints } }) => {
+        const parsedEndpoints = JSON.parse(listOfEndpoints);
+
+        for (key in parsedEndpoints) {
+          expect(parsedEndpoints[key]).toHaveProperty("description");
+          expect(parsedEndpoints[key]).toHaveProperty("queries");
+          expect(parsedEndpoints[key]).toHaveProperty("exampleResponse");
+        }
+      });
+  });
+});
