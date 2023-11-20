@@ -1,3 +1,5 @@
+const db = require("../db/connection");
+
 exports.receiveAllTopics = (req, res) => {
-  console.log("from modules");
+  return db.query("SELECT * FROM topics;");
 };
