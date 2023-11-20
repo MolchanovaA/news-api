@@ -19,24 +19,16 @@ afterAll(() => {
 });
 
 describe("task 2. GET /api/topics", () => {
-  test("GET 200 /api/topics. Has to return an arr of objs. Each obj has to have description and slug properties", () => {
+  test("GET 200 /api/topics. Has to return an arr of objs.  The length of topics array should be same as in data file. Each obj has to have description and slug properties", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
-      .then(({ body }) => {
-        body.topics.forEach((topic) => {
+      .then(({ body: { topics } }) => {
+        expect(topics.length).toBe(topicData.length);
+        topics.forEach((topic) => {
           expect(topic).toHaveProperty("description");
           expect(topic).toHaveProperty("slug");
         });
-      });
-  });
-
-  test("GET 200 /api/topics. The length of topics array should be same as in data file", () => {
-    return request(app)
-      .get("/api/topics")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.topics.length).toBe(topicData.length);
       });
   });
 

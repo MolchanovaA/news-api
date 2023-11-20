@@ -3,8 +3,6 @@ const { getAllTopics } = require("./controllers/news.controller");
 const { error_handler } = require("./error-handlers/error-handler");
 const app = express();
 
-app.use(express.json());
-
 app.get("/api/topics", getAllTopics);
 module.exports = app;
 
