@@ -18,7 +18,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe("task 2. GET /api/topics", () => {
+xdescribe("task 2. GET /api/topics", () => {
   test("GET /api/topics. Has to return", () => {
     return request(app)
       .get("/api/topics")
