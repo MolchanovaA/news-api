@@ -49,6 +49,7 @@ describe("task 3. GET /api", () => {
       .expect(200)
       .then(({ body: { listOfEndpoints } }) => {
         let isJson;
+        console.log(listOfEndpoints);
         try {
           JSON.parse(listOfEndpoints);
           isJson = true;

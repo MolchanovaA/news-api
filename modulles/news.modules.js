@@ -26,7 +26,7 @@ exports.toAddEndpointsInfo = (listOfAllEndpoints, corrections) => {
 
 exports.writeEndpoints = (endpoints) => {
   const endpointsFile = "endpoints.json";
-  return fs.writeFile(endpointsFile, JSON.stringify(endpoints, 2));
+  return fs.writeFile(endpointsFile, JSON.stringify(endpoints, null, 2));
 };
 
 exports.getSingleArticleById = (id) => {
