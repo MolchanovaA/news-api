@@ -28,3 +28,8 @@ exports.writeEndpoints = (endpoints) => {
   const endpointsFile = "endpoints.json";
   return fs.writeFile(endpointsFile, JSON.stringify(endpoints, 2));
 };
+
+exports.getSingleArticleById = (id) => {
+  let queryStr = `SELECT * FROM articles WHERE article_id =$1`;
+  return db.query(queryStr, [id]);
+};

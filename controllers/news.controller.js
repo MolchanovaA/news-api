@@ -4,6 +4,7 @@ const {
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
+  getSingleArticleById,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -50,4 +51,13 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
   }
 
   return !pathsNeedToUpdate.length ? false : pathsNeedToUpdate;
+};
+
+exports.getArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  getSingleArticleById(article_id)
+    .then(({ rows }) => {
+      res.status(200).send({ article: rows[0] });
+    })
+    .catch(next);
 };

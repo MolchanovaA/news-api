@@ -75,3 +75,30 @@ describe("task 3. GET /api", () => {
       });
   });
 });
+
+describe("task 4. /api/articles/:article_id", () => {
+  test("GET 200 /api/articles/:article_id", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toHaveProperty("author");
+        expect(article).toHaveProperty("title");
+        expect(article).toHaveProperty("article_id");
+        expect(article).toHaveProperty("body");
+        expect(article).toHaveProperty("topic");
+        expect(article).toHaveProperty("created_at");
+        expect(article).toHaveProperty("votes");
+        expect(article).toHaveProperty("article_img_url");
+      });
+  });
+
+  test("GET 404  /api/articles/:article_id if provided wrong id", () => {
+    return request(app)
+      .get("/api/articles/wrong-id")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+});
