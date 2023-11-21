@@ -1,13 +1,13 @@
 const db = require("../db/connection");
 const fs = require("fs/promises");
 
-exports.receiveAllTopics = (req, res) => {
-  return db.query("SELECT * FROM topics;").then(({ rows }) => {
+exports.receiveAll = (tableName) => {
+  return db.query(`SELECT * FROM ${tableName};`).then(({ rows }) => {
     return rows;
   });
 };
 
-exports.receiveAllEndpoints = (req, res) => {
+exports.receiveAllEndpoints = () => {
   const endpointsFile = "endpoints.json";
   return fs.readFile(endpointsFile, "utf-8").then((dataEndpoints) => {
     return dataEndpoints;
@@ -34,4 +34,17 @@ exports.selectArticleById = (id) => {
   return db.query(queryStr, [id]).catch((err) => {
     throw err;
   });
+};
+
+exports.getArticlesWithCommentCounts = () => {
+  return db.query(
+    `SELECT articles.article_id, articles.author , articles.title, articles.topic,
+    articles.created_at, articles.votes, articles.article_img_url
+    , COUNT(comments.comment_id) as comment_count
+FROM articles
+FULL JOIN comments
+ON articles.article_id = comments.article_id
+GROUP BY articles.article_id ORDER BY articles.created_at DESC;
+`
+  );
 };

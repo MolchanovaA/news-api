@@ -1,13 +1,15 @@
 const {
-  receiveAllTopics,
+  receiveAll,
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
   selectArticleById,
+  getArticlesWithCommentCounts,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
-  receiveAllTopics().then((topics) => {
+  const table = "topics";
+  receiveAll(table).then((topics) => {
     res.status(200).send({ topics: topics });
   });
 };
@@ -66,4 +68,10 @@ exports.getArticleById = (req, res, next) => {
         res.status(400).send({ msg: "bad request" });
       }
     });
+};
+
+exports.getAllArticles = (req, res, next) => {
+  getArticlesWithCommentCounts().then(({ rows }) => {
+    res.status(200).send({ articles: rows });
+  });
 };
