@@ -5,6 +5,7 @@ const {
   writeEndpoints,
   selectArticleById,
   getArticlesWithCommentCounts,
+  postCommentToDb,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -73,5 +74,26 @@ exports.getArticleById = (req, res, next) => {
 exports.getAllArticles = (req, res, next) => {
   getArticlesWithCommentCounts().then(({ rows }) => {
     res.status(200).send({ articles: rows });
+  });
+};
+
+exports.postNewComment = (req, res, next) => {
+  // console.log(req.body, "POST");
+  if (!req.body.username || !req.body.body)
+    res.status(400).send({ msg: "bad request" });
+  const { article_id } = req.params;
+  const date = Date.now();
+  const commentToPost = [
+    req.body.body,
+    req.body.username,
+    article_id,
+    0,
+    new Date(date),
+  ];
+
+  // console.log(commentToPost, " CMM");
+
+  postCommentToDb(commentToPost).then(({ rows }) => {
+    res.status(201).send({ posted_comment: rows[0] });
   });
 };

@@ -9,6 +9,7 @@ const {
 } = require("../db/data/test-data/index");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+const { default: test } = require("node:test");
 
 beforeEach(() => {
   return seed({ articleData, commentData, topicData, userData }).then(() => {});
@@ -138,4 +139,29 @@ describe("/api/articles", () => {
         });
       });
   });
+});
+describe.only("task 7. /api/articles/:article_id/comments", () => {
+  test("POST 201. returns comment that has been posted", () => {
+    const postBody = {
+      username: "rogersop",
+      body: "Hi There",
+    };
+    const outputComment = {
+      comment_id: 19,
+      body: "Hi There",
+      article_id: 4,
+      author: "rogersop",
+      votes: 0,
+    };
+    return request(app)
+      .post("/api/articles/4/comments")
+      .send(postBody)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.posted_comment).toMatchObject(outputComment);
+        expect(typeof body.posted_comment.created_at).toBe("string");
+      });
+  });
+  test("if comment doesn't have user / body", () => {});
+  test("if user doesn't exist", () => {});
 });
