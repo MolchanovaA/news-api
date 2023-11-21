@@ -123,3 +123,41 @@ describe("task 4. /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id/comments", () => {
+  test("GET 200, returns array of comments of passed as article_id article", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBe(11);
+        expect(comments[0].comment_id).toBe(5);
+      });
+  });
+  xtest("GET 404, returns error msg as no such article exists", () => {
+    return request(app)
+      .get("/api/articles/99/comments")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("");
+      });
+  });
+  xtest("GET 400, article id is not correct", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBe(11);
+        expect(comments[0].comment_id).toBe(5);
+      });
+  });
+  xtest("GET 200, and empty [] in no comments in this article", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBe(11);
+        expect(comments[0].comment_id).toBe(5);
+      });
+  });
+});

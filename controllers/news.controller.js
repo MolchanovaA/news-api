@@ -4,6 +4,7 @@ const {
   toAddEndpointsInfo,
   writeEndpoints,
   selectArticleById,
+  getAllCommentsByArticle,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -66,4 +67,12 @@ exports.getArticleById = (req, res, next) => {
         res.status(400).send({ msg: "bad request" });
       }
     });
+};
+
+exports.getArticleAndItsComments = (req, res) => {
+  const { article_id } = req.params;
+
+  getAllCommentsByArticle(article_id).then((arrayOfComments) => {
+    res.status(200).send({ comments: arrayOfComments });
+  });
 };
