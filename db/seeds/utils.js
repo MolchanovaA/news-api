@@ -1,10 +1,5 @@
 exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
   if (!created_at) return { ...otherProperties };
-  // if (otherProperties.title === "Living in the shadow of a great man") {
-  //   const data = new Date(created_at);
-  //   console.log(created_at, "FROM SEED");
-  //   console.log(data.getTime(), "DATA");
-  // }
   return { created_at: new Date(created_at), ...otherProperties };
 };
 

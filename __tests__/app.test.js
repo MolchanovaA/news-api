@@ -113,4 +113,13 @@ describe("task 4. /api/articles/:article_id", () => {
         expect(msg).toBe("bad request");
       });
   });
+
+  test("GET 404 /api/articles/:article_id if provided not existing id", () => {
+    return request(app)
+      .get("/api/articles/99")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
+      });
+  });
 });

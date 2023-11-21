@@ -29,7 +29,9 @@ exports.writeEndpoints = (endpoints) => {
   return fs.writeFile(endpointsFile, JSON.stringify(endpoints, null, 2));
 };
 
-exports.getSingleArticleById = (id) => {
+exports.selectArticleById = (id) => {
   let queryStr = `SELECT * FROM articles WHERE article_id =$1`;
-  return db.query(queryStr, [id]);
+  return db.query(queryStr, [id]).catch((err) => {
+    throw err;
+  });
 };

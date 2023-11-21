@@ -1,10 +1,9 @@
-const { end } = require("../db/connection");
 const {
   receiveAllTopics,
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
-  getSingleArticleById,
+  selectArticleById,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -55,10 +54,16 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  getSingleArticleById(article_id)
+  selectArticleById(article_id)
     .then(({ rows }) => {
-      console.log(rows[0].created_at.getTime(), "CONT");
+      if (!rows.length) {
+        res.status(404).send({ msg: "not found" });
+      }
       res.status(200).send({ article: rows[0] });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.code === "22P02") {
+        res.status(400).send({ msg: "bad request" });
+      }
+    });
 };
