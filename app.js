@@ -7,7 +7,7 @@ const {
 } = require("./controllers/news.controller");
 const {
   error_handler,
-  handle_custom_errors,
+  handle_all_errors,
 } = require("./error-handlers/error-handler");
 const app = express();
 
@@ -17,5 +17,5 @@ app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getArticleAndItsComments);
 
 app.all("*", error_handler);
-app.use(handle_custom_errors);
+app.use(handle_all_errors);
 module.exports = app;

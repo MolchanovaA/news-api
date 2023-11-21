@@ -30,12 +30,31 @@ exports.writeEndpoints = (endpoints) => {
   return fs.writeFile(endpointsFile, JSON.stringify(endpoints, null, 2));
 };
 
-exports.selectArticleById = (id, comments) => {
+exports.selectArticleById = (id) => {
   let queryStr = `SELECT * FROM articles WHERE article_id =$1`;
-  if (comments) {
-    queryStr = `SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id =$1 ORDER BY created_at DESC`;
-  }
-  return db.query(queryStr, [id]).catch((err) => {
-    throw err;
-  });
+
+  return db
+    .query(queryStr, [id])
+    .then((data) => {
+      if (!data.rows.length) {
+        return Promise.reject({ msg: "not found" });
+      }
+      return data.rows;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+exports.selectCommentsByArticleId = (id) => {
+  const queryStr = `SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id =$1 ORDER BY created_at DESC`;
+
+  return db
+    .query(queryStr, [id])
+    .then((data) => {
+      return data.rows;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };

@@ -5,6 +5,7 @@ const {
   writeEndpoints,
   selectArticleById,
   getAllCommentsByArticle,
+  selectCommentsByArticleId,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -56,32 +57,21 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   selectArticleById(article_id)
-    .then(({ rows }) => {
-      if (!rows.length) {
-        res.status(404).send({ msg: "not found" });
-      }
+    .then((rows) => {
       res.status(200).send({ article: rows[0] });
     })
-    .catch((err) => {
-      if (err.code === "22P02") {
-        res.status(400).send({ msg: "bad request" });
-      }
-    });
+    .catch(next);
 };
 
-exports.getArticleAndItsComments = (req, res) => {
+exports.getArticleAndItsComments = (req, res, next) => {
   const { article_id } = req.params;
-  const areCommentsNeeded = true;
-  selectArticleById(article_id, areCommentsNeeded)
-    .then(({ rows }) => {
-      if (!rows.length) {
-        res.status(404).send({ msg: "not found" });
-      }
-      res.status(200).send({ comments: rows });
+  const ifArticleExists = selectArticleById(article_id);
+
+  const commentsFromArticle = selectCommentsByArticleId(article_id);
+
+  Promise.all([ifArticleExists, commentsFromArticle])
+    .then(([article, comments]) => {
+      res.status(200).send({ comments: comments });
     })
-    .catch((err) => {
-      if (err.code === "22P02") {
-        res.status(400).send({ msg: "bad request" });
-      }
-    });
+    .catch(next);
 };

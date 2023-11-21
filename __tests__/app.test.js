@@ -150,13 +150,13 @@ describe("/api/articles/:article_id/comments", () => {
         expect(msg).toBe("bad request");
       });
   });
-  xtest("GET 200, and empty [] in no comments in this article", () => {
+  test("GET 200, and empty [] in no comments in existing article", () => {
     return request(app)
-      .get("/api/articles/1/comments")
+      .get("/api/articles/4/comments")
       .expect(200)
       .then(({ body: { comments } }) => {
-        expect(comments.length).toBe(11);
-        expect(comments[0].comment_id).toBe(5);
+        console.log(comments, "TEST");
+        expect(comments.length).toBe(0);
       });
   });
 });
