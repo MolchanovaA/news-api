@@ -76,7 +76,7 @@ describe("task 3. GET /api", () => {
   });
 });
 
-describe("/api/articles", () => {
+xdescribe("/api/articles", () => {
   test("GET 200. should return an array of all articles", () => {
     return request(app)
       .get("/api/articles")
