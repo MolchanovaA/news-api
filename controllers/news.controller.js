@@ -1,13 +1,15 @@
-const { end } = require("../db/connection");
+// const { end } = require("../db/connection");
 const {
-  receiveAllTopics,
+  receiveAll,
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
+  receiveAllAndSort,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
-  receiveAllTopics().then((topics) => {
+  const table = "topics";
+  receiveAll(table).then((topics) => {
     res.status(200).send({ topics: topics });
   });
 };
@@ -50,4 +52,20 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
   }
 
   return !pathsNeedToUpdate.length ? false : pathsNeedToUpdate;
+};
+
+exports.getAllArticles = (req, res, next) => {
+  console.log("all art");
+  const table = "articles";
+  const titles = [
+    "author",
+    "title",
+    "article_id",
+    "topic",
+    "created_at",
+    "votes",
+    "article_img_url",
+    "",
+  ];
+  receiveAllAndSort(table);
 };

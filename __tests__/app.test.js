@@ -75,3 +75,14 @@ describe("task 3. GET /api", () => {
       });
   });
 });
+
+describe("/api/articles", () => {
+  test("GET 200. should return an array of all articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        console.log(articles, "TEST");
+      });
+  });
+});
