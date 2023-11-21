@@ -30,22 +30,12 @@ exports.writeEndpoints = (endpoints) => {
   return fs.writeFile(endpointsFile, JSON.stringify(endpoints, null, 2));
 };
 
-exports.selectArticleById = (id) => {
+exports.selectArticleById = (id, comments) => {
   let queryStr = `SELECT * FROM articles WHERE article_id =$1`;
+  if (comments) {
+    queryStr = `SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id =$1 ORDER BY created_at DESC`;
+  }
   return db.query(queryStr, [id]).catch((err) => {
     throw err;
   });
-};
-
-exports.getAllCommentsByArticle = (id) => {
-  let queryStr = `SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id =$1 ORDER BY created_at DESC`;
-  return db
-    .query(queryStr, [id])
-    .then(({ rows }) => {
-      if (!rows.length) throw Promise.reject();
-      return rows;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 };

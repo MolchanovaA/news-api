@@ -71,13 +71,17 @@ exports.getArticleById = (req, res, next) => {
 
 exports.getArticleAndItsComments = (req, res) => {
   const { article_id } = req.params;
-
-  getAllCommentsByArticle(article_id).then((arrayOfComments) => {
-    res
-      .status(200)
-      .send({ comments: arrayOfComments })
-      .catch(() => {
-        console.log("err");
-      });
-  });
+  const areCommentsNeeded = true;
+  selectArticleById(article_id, areCommentsNeeded)
+    .then(({ rows }) => {
+      if (!rows.length) {
+        res.status(404).send({ msg: "not found" });
+      }
+      res.status(200).send({ comments: rows });
+    })
+    .catch((err) => {
+      if (err.code === "22P02") {
+        res.status(400).send({ msg: "bad request" });
+      }
+    });
 };
