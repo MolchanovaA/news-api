@@ -49,7 +49,6 @@ describe("task 3. GET /api", () => {
       .expect(200)
       .then(({ body: { listOfEndpoints } }) => {
         let isJson;
-        console.log(listOfEndpoints);
         try {
           JSON.parse(listOfEndpoints);
           isJson = true;
@@ -78,26 +77,38 @@ describe("task 3. GET /api", () => {
 });
 
 describe("task 4. /api/articles/:article_id", () => {
-  test("GET 200 /api/articles/:article_id", () => {
+  test("GET 200 article with id = 1", () => {
+    const article_id_1 = {
+      article_id: 1,
+      title: "Living in the shadow of a great man",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "I find this existence challenging",
+      created_at: 1594329060000,
+      votes: 100,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then(({ body: { article } }) => {
-        expect(article).toHaveProperty("author");
-        expect(article).toHaveProperty("title");
-        expect(article).toHaveProperty("article_id");
-        expect(article).toHaveProperty("body");
-        expect(article).toHaveProperty("topic");
-        expect(article).toHaveProperty("created_at");
-        expect(article).toHaveProperty("votes");
-        expect(article).toHaveProperty("article_img_url");
+        expect(article.article_id).toBe(article_id_1.article_id);
+        expect(article.title).toBe(article_id_1.title);
+        expect(article.topic).toBe(article_id_1.topic);
+        expect(article.author).toBe(article_id_1.author);
+        expect(article.body).toBe(article_id_1.body);
+        expect(typeof article.created_at).toBe("string");
+        expect(article.votes).toBe(article_id_1.votes);
+        expect(article.article_img_url).toBe(article_id_1.article_img_url);
       });
   });
 
-  test("GET 404  /api/articles/:article_id if provided wrong id", () => {
+  test("GET 400  /api/articles/:article_id if provided wrong id", () => {
     return request(app)
       .get("/api/articles/wrong-id")
-      .expect(404)
+      .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("bad request");
       });

@@ -57,6 +57,7 @@ exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   getSingleArticleById(article_id)
     .then(({ rows }) => {
+      console.log(rows[0].created_at.getTime(), "CONT");
       res.status(200).send({ article: rows[0] });
     })
     .catch(next);
