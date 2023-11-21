@@ -29,7 +29,19 @@ exports.writeEndpoints = (endpoints) => {
   return fs.writeFile(endpointsFile, JSON.stringify(endpoints, 2));
 };
 
-exports.receiveAllAndSort = (tableName, query) => {
-  let queryStr = `SELECT * FROM ${tableName} ORDER BY created_at DESC`;
-  return db.query();
+// exports.receiveAllAndSort = (tableName, query) => {
+//   let queryStr = `SELECT * FROM ${tableName} ORDER BY created_at DESC`;
+//   return db.query();
+// };
+
+exports.countComments = () => {
+  return db.query(
+    `SELECT articles.article_id 
+    , COUNT(comments.comment_id) as comment_count
+FROM articles
+INNER JOIN comments
+ON articles.article_id = comments.article_id
+GROUP BY articles.article_id;
+`
+  );
 };

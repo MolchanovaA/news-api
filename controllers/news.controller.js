@@ -4,7 +4,7 @@ const {
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
-  receiveAllAndSort,
+  countComments,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -55,8 +55,6 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-  console.log("all art");
-  const table = "articles";
   const titles = [
     "author",
     "title",
@@ -65,7 +63,25 @@ exports.getAllArticles = (req, res, next) => {
     "created_at",
     "votes",
     "article_img_url",
-    "",
+    "comment_count",
   ];
-  receiveAllAndSort(table);
+
+  const promiseCountedComments = countComments().then(({ rows }) => {
+    return rows;
+  });
+
+  const promiseArticles = receiveAll("articles");
+
+  Promise.all([promiseCountedComments, promiseArticles]).then(
+    ([comments, articles]) => {
+      // console.log(comments, articles);
+      const commentsObj = comments.reduce((acc, item) => {
+        acc[item.article_id] = { comment_count: item.comment_count };
+        return acc;
+      }, {});
+      console.log(commentsObj, "LLL");
+      const updatedWithCommentsCountArticleArray = [];
+      articles.forEach((item) => {});
+    }
+  );
 };
