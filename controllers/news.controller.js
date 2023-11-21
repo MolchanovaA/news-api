@@ -3,7 +3,7 @@ const {
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
-  countComments,
+  getArticlesWithCommentCounts,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -54,7 +54,7 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-  countComments().then(({ rows }) => {
+  getArticlesWithCommentCounts().then(({ rows }) => {
     res.status(200).send({ articles: rows });
   });
 };

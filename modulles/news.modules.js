@@ -29,7 +29,7 @@ exports.writeEndpoints = (endpoints) => {
   return fs.writeFile(endpointsFile, JSON.stringify(endpoints, 2));
 };
 
-exports.countComments = () => {
+exports.getArticlesWithCommentCounts = () => {
   return db.query(
     `SELECT articles.article_id, articles.author , articles.title, articles.topic,
     articles.created_at, articles.votes, articles.article_img_url

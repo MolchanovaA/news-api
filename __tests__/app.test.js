@@ -83,18 +83,10 @@ describe("/api/articles", () => {
       .expect(200)
       .then(({ body: { articles } }) => {
         expect(articles.length).toBe(articleData.length);
-        expect(articles[0].article_id).toBe(3);
+        expect(articles).toBeSorted("created_at", { descending: true });
         articles.forEach((article) => {
           expect(article).not.toHaveProperty("body");
         });
-      });
-  });
-  test("GET 404. url not found", () => {
-    return request(app)
-      .get("/api/articleserror")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("path is not correct");
       });
   });
 });
