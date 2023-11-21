@@ -1,9 +1,9 @@
-const { end } = require("../db/connection");
 const {
   receiveAllTopics,
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
+  selectArticleById,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -50,4 +50,20 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
   }
 
   return !pathsNeedToUpdate.length ? false : pathsNeedToUpdate;
+};
+
+exports.getArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  selectArticleById(article_id)
+    .then(({ rows }) => {
+      if (!rows.length) {
+        res.status(404).send({ msg: "not found" });
+      }
+      res.status(200).send({ article: rows[0] });
+    })
+    .catch((err) => {
+      if (err.code === "22P02") {
+        res.status(400).send({ msg: "bad request" });
+      }
+    });
 };
