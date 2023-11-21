@@ -86,6 +86,7 @@ describe("/api/articles", () => {
         expect(articles).toBeSorted("created_at", { descending: true });
         articles.forEach((article) => {
           expect(article).not.toHaveProperty("body");
+          expect(article).toHaveProperty("comment_count");
         });
       });
   });
