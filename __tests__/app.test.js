@@ -9,7 +9,6 @@ const {
 } = require("../db/data/test-data/index");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
-const { default: test } = require("node:test");
 
 beforeEach(() => {
   return seed({ articleData, commentData, topicData, userData }).then(() => {});
