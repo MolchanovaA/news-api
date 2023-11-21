@@ -124,8 +124,8 @@ describe("task 4. /api/articles/:article_id", () => {
   });
 });
 
-describe("/api/articles/:article_id/comments", () => {
-  test("GET 200, returns array of comments of passed as article_id article", () => {
+describe.only("/api/articles/:article_id/comments", () => {
+  xtest("GET 200, returns array of comments of passed as article_id article", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)

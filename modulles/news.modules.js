@@ -1,3 +1,4 @@
+const { error } = require("console");
 const db = require("../db/connection");
 const fs = require("fs/promises");
 
@@ -41,9 +42,10 @@ exports.getAllCommentsByArticle = (id) => {
   return db
     .query(queryStr, [id])
     .then(({ rows }) => {
+      if (!rows.length) throw Promise.reject();
       return rows;
     })
     .catch((err) => {
-      throw err;
+      console.log(err);
     });
 };

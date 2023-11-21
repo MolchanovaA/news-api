@@ -73,6 +73,11 @@ exports.getArticleAndItsComments = (req, res) => {
   const { article_id } = req.params;
 
   getAllCommentsByArticle(article_id).then((arrayOfComments) => {
-    res.status(200).send({ comments: arrayOfComments });
+    res
+      .status(200)
+      .send({ comments: arrayOfComments })
+      .catch(() => {
+        console.log("err");
+      });
   });
 };
