@@ -1,4 +1,3 @@
-// const { end } = require("../db/connection");
 const {
   receiveAll,
   receiveAllEndpoints,
@@ -55,33 +54,7 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-  const titles = [
-    "author",
-    "title",
-    "article_id",
-    "topic",
-    "created_at",
-    "votes",
-    "article_img_url",
-    "comment_count",
-  ];
-
-  const promiseCountedComments = countComments().then(({ rows }) => {
-    return rows;
+  countComments().then(({ rows }) => {
+    res.status(200).send({ articles: rows });
   });
-
-  const promiseArticles = receiveAll("articles");
-
-  Promise.all([promiseCountedComments, promiseArticles]).then(
-    ([comments, articles]) => {
-      // console.log(comments, articles);
-      const commentsObj = comments.reduce((acc, item) => {
-        acc[item.article_id] = { comment_count: item.comment_count };
-        return acc;
-      }, {});
-      console.log(commentsObj, "LLL");
-      const updatedWithCommentsCountArticleArray = [];
-      articles.forEach((item) => {});
-    }
-  );
 };

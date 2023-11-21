@@ -76,13 +76,25 @@ describe("task 3. GET /api", () => {
   });
 });
 
-xdescribe("/api/articles", () => {
-  test("GET 200. should return an array of all articles", () => {
+describe("/api/articles", () => {
+  test("GET 200. should return an array of all articles, sorted by DESC (earliest if the first), has no body as property", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
-        console.log(articles, "TEST");
+        expect(articles.length).toBe(articleData.length);
+        expect(articles[0].article_id).toBe(3);
+        articles.forEach((article) => {
+          expect(article).not.toHaveProperty("body");
+        });
+      });
+  });
+  test("GET 404. url not found", () => {
+    return request(app)
+      .get("/api/articleserror")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("path is not correct");
       });
   });
 });
