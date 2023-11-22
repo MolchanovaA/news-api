@@ -44,6 +44,7 @@
       ]
     }
   },
+
   "POST /api/articles/:article_id/comments": {
     "description": "adding comments to DB if comment has body, username and user existing in DB. If success responds with posted comment",
     "queries": ["article_id", "username", "body"],
@@ -55,8 +56,20 @@
           "article_id": 4,
           "author": "rogersop",
           "votes": 0
+
         }
       ]
     }
-  }
+  },
+   "GET /api/articles/:article_id/comments": {
+    "description": "serves array of comments to article by article_id",
+    "queries": ["article_id"],
+    "exampleResponse": {
+      "comments": [
+        {
+          "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          "votes": 16,
+          "author": "butter_bridge",
+          "article_id": 9,
+          "created_at": 1586179020000
 }

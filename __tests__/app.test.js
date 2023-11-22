@@ -9,6 +9,7 @@ const {
 } = require("../db/data/test-data/index");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+const { expect } = require("@jest/globals");
 
 beforeEach(() => {
   return seed({ articleData, commentData, topicData, userData }).then(() => {});
@@ -124,14 +125,16 @@ describe("task 4. /api/articles/:article_id", () => {
   });
 });
 
-describe("/api/articles", () => {
+describe("task 5 /api/articles", () => {
   test("GET 200. should return an array of all articles, sorted by DESC (earliest if the first), has no body as property", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
         expect(articles.length).toBe(articleData.length);
-        expect(articles).toBeSorted("created_at", { descending: true });
+        expect(articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
         articles.forEach((article) => {
           expect(article).not.toHaveProperty("body");
           expect(article).toHaveProperty("comment_count");
@@ -139,6 +142,7 @@ describe("/api/articles", () => {
       });
   });
 });
+
 describe("task 7. POST /api/articles/:article_id/comments", () => {
   test("POST 201. returns comment that has been posted", () => {
     const postBody = {
@@ -183,11 +187,30 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
     return request(app)
       .post("/api/articles/4/comments")
       .send(postBody)
+=======
+
+describe("Task 6 /api/articles/:article_id/comments", () => {
+  test("GET 200, returns array of comments of passed as article_id article", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBe(11);
+        expect(comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("GET 404, returns error msg as no such article exists", () => {
+    return request(app)
+      .get("/api/articles/99/comments")
+
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("not found");
       });
   });
+
   test("POST 400 bad article_id", () => {
     const postBody = {
       username: "rogersop",
@@ -196,11 +219,17 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
     return request(app)
       .post("/api/articles/bad_art_id/comments")
       .send(postBody)
+
+  test("GET 400, article id is not correct", () => {
+    return request(app)
+      .get("/api/articles/1dd/comments")
+
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("bad request");
       });
   });
+
   test("Status 404: valid article_id that doesn't exist e.g. 683", () => {
     const postBody = {
       username: "rogersop",
@@ -234,6 +263,14 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
       .then(({ body }) => {
         expect(body.posted_comment).toMatchObject(outputComment);
         expect(typeof body.posted_comment.created_at).toBe("string");
+
+  test("GET 200, and empty [] in no comments in existing article", () => {
+    return request(app)
+      .get("/api/articles/4/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBe(0);
+
       });
   });
 });
