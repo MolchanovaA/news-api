@@ -9,6 +9,7 @@ const {
 } = require("../db/data/test-data/index");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+const { expect } = require("@jest/globals");
 
 beforeEach(() => {
   return seed({ articleData, commentData, topicData, userData }).then(() => {});
@@ -124,14 +125,16 @@ describe("task 4. /api/articles/:article_id", () => {
   });
 });
 
-describe("/api/articles", () => {
+describe("task 5 /api/articles", () => {
   test("GET 200. should return an array of all articles, sorted by DESC (earliest if the first), has no body as property", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
         expect(articles.length).toBe(articleData.length);
-        expect(articles).toBeSorted("created_at", { descending: true });
+        expect(articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
         articles.forEach((article) => {
           expect(article).not.toHaveProperty("body");
           expect(article).toHaveProperty("comment_count");
@@ -147,7 +150,9 @@ describe("Task 6 /api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body: { comments } }) => {
         expect(comments.length).toBe(11);
-        expect(comments[0].comment_id).toBe(5);
+        expect(comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
       });
   });
   test("GET 404, returns error msg as no such article exists", () => {
