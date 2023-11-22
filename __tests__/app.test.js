@@ -140,7 +140,7 @@ describe("/api/articles", () => {
   });
 });
 
-describe("/api/articles/:article_id/comments", () => {
+describe("Task 6 /api/articles/:article_id/comments", () => {
   test("GET 200, returns array of comments of passed as article_id article", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -171,7 +171,6 @@ describe("/api/articles/:article_id/comments", () => {
       .get("/api/articles/4/comments")
       .expect(200)
       .then(({ body: { comments } }) => {
-        console.log(comments, "TEST");
         expect(comments.length).toBe(0);
       });
   });
