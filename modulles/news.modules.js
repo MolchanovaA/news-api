@@ -1,5 +1,6 @@
 const db = require("../db/connection");
 const fs = require("fs/promises");
+const format = require("pg-format");
 
 exports.receiveAll = (tableName) => {
   return db.query(`SELECT * FROM ${tableName};`).then(({ rows }) => {
@@ -46,9 +47,6 @@ exports.selectCommentsByArticleId = (id) => {
   return db.query(queryStr, [id]).then((data) => {
     return data.rows;
   });
-  // .catch((err) => {
-  //   throw err;
-  // });
 };
 
 exports.getArticlesWithCommentCounts = () => {
@@ -62,4 +60,9 @@ ON articles.article_id = comments.article_id
 GROUP BY articles.article_id ORDER BY articles.created_at DESC;
 `
   );
+};
+exports.postCommentToDb = (comment) => {
+  const queryStr =
+    "INSERT INTO comments (body, author, article_id, votes, created_at) VALUES %L  RETURNING *;";
+  return db.query(format(queryStr, [comment]));
 };

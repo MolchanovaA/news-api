@@ -7,6 +7,7 @@ const {
   getAllCommentsByArticle,
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
+  postCommentToDb,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -89,6 +90,7 @@ exports.postNewComment = (req, res, next) => {
     return res.status(400).send({ msg: "bad request" });
   }
   const { article_id } = req.params;
+
   const date = Date.now();
   const commentToPost = [
     req.body.body,

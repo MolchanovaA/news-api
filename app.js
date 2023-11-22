@@ -5,7 +5,7 @@ const {
   getAllArticles,
   getArticleById,
   getArticleAndItsComments,
-  // postNewComment,
+  postNewComment,
 } = require("./controllers/news.controller");
 
 const {
@@ -16,6 +16,7 @@ const {
   other_errors,
 } = require("./error-handlers/error-handler");
 const app = express();
+app.use(express.json());
 
 app.get("/api/topics", getAllTopics);
 app.get("/api", getAvailableEndpoints);
@@ -23,7 +24,7 @@ app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getAllArticles);
 app.get("/api/articles/:article_id/comments", getArticleAndItsComments);
 
-// app.post("/api/articles/:article_id/comments", postNewComment);
+app.post("/api/articles/:article_id/comments", postNewComment);
 
 app.all("*", error_handler);
 
