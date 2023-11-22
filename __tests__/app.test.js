@@ -9,9 +9,6 @@ const {
 } = require("../db/data/test-data/index");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
-const { expect } = require("@jest/globals");
-const { describe } = require("yargs");
-const { default: test } = require("node:test");
 
 beforeEach(() => {
   return seed({ articleData, commentData, topicData, userData }).then(() => {});
@@ -281,5 +278,5 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
   });
 });
 xdescribe("Task 9, /api/comments/:comment_id", () => {
-  test("DELETE");
+  xtest("DELETE", () => {});
 });
