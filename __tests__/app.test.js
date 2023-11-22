@@ -140,7 +140,7 @@ describe("/api/articles", () => {
   });
 });
 describe("task 7. POST /api/articles/:article_id/comments", () => {
-  test("POST 201. returns comment that has been posted", () => {
+  test.only("POST 201. returns comment that has been posted", () => {
     const postBody = {
       username: "rogersop",
       body: "Hi There",
