@@ -280,7 +280,7 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
 });
 
 describe("Task 8 /api/articles/:article_id, update an article by id", () => {
-  test("PATCH 201, should inc vote property by 1", () => {
+  test("PATCH 201, should inc vote property by 5", () => {
     const changesToArticle = { inc_votes: 5 };
     const output = {
       title: "Living in the shadow of a great man",
@@ -292,6 +292,7 @@ describe("Task 8 /api/articles/:article_id, update an article by id", () => {
       article_img_url:
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     };
+
     return request(app)
       .patch("/api/articles/1")
       .send(changesToArticle)
@@ -301,6 +302,29 @@ describe("Task 8 /api/articles/:article_id, update an article by id", () => {
         expect(article.votes).toBe(output.votes);
       });
   });
+
+  test("PATCH 201, should decr vote property by 105", () => {
+    const changesToArticle = { inc_votes: -105 };
+    const output = {
+      title: "Living in the shadow of a great man",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "I find this existence challenging",
+      votes: -5,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+
+    return request(app)
+      .patch("/api/articles/1")
+      .send(changesToArticle)
+      .expect(201)
+      .then(({ body: { article } }) => {
+        expect(article).toMatchObject(output);
+        expect(article.votes).toBe(output.votes);
+      });
+  });
+
   test("PATCH 404 if article is not exist", () => {
     const changesToArticle = { inc_votes: 5 };
     return request(app)
