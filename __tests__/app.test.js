@@ -139,7 +139,7 @@ describe("/api/articles", () => {
       });
   });
 });
-describe.only("task 7. /api/articles/:article_id/comments", () => {
+describe("task 7. POST /api/articles/:article_id/comments", () => {
   test("POST 201. returns comment that has been posted", () => {
     const postBody = {
       username: "rogersop",
@@ -161,6 +161,31 @@ describe.only("task 7. /api/articles/:article_id/comments", () => {
         expect(typeof body.posted_comment.created_at).toBe("string");
       });
   });
-  test("if comment doesn't have user / body", () => {});
-  test("if user doesn't exist", () => {});
+  test("POST 400. if comment doesn't have user / body", () => {
+    const postBody = {
+      username: "rogersop",
+    };
+
+    return request(app)
+      .post("/api/articles/4/comments")
+      .send(postBody)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("POST 404 if user doesn't exist", () => {
+    const postBody = {
+      username: "not_registered",
+      body: "Hi There",
+    };
+
+    return request(app)
+      .post("/api/articles/4/comments")
+      .send(postBody)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
+      });
+  });
 });

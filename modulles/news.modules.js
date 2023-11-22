@@ -52,10 +52,9 @@ GROUP BY articles.article_id ORDER BY articles.created_at DESC;
 };
 
 exports.postCommentToDb = (comment) => {
-  console.log(comment, "POSTED");
   const queryStr =
     "INSERT INTO comments (body, author, article_id, votes, created_at) VALUES %L  RETURNING *;";
   return db.query(format(queryStr, [comment])).catch((err) => {
-    console.log(err, "ERROR MOD POST");
+    throw err;
   });
 };

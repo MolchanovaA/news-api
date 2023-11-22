@@ -64,11 +64,7 @@ exports.getArticleById = (req, res, next) => {
       }
       res.status(200).send({ article: rows[0] });
     })
-    .catch((err) => {
-      if (err.code === "22P02") {
-        res.status(400).send({ msg: "bad request" });
-      }
-    });
+    .catch(next);
 };
 
 exports.getAllArticles = (req, res, next) => {
@@ -78,9 +74,9 @@ exports.getAllArticles = (req, res, next) => {
 };
 
 exports.postNewComment = (req, res, next) => {
-  // console.log(req.body, "POST");
-  if (!req.body.username || !req.body.body)
-    res.status(400).send({ msg: "bad request" });
+  if (!req.body.username || !req.body.body) {
+    return res.status(400).send({ msg: "bad request" });
+  }
   const { article_id } = req.params;
   const date = Date.now();
   const commentToPost = [
@@ -91,9 +87,9 @@ exports.postNewComment = (req, res, next) => {
     new Date(date),
   ];
 
-  // console.log(commentToPost, " CMM");
-
-  postCommentToDb(commentToPost).then(({ rows }) => {
-    res.status(201).send({ posted_comment: rows[0] });
-  });
+  postCommentToDb(commentToPost)
+    .then(({ rows }) => {
+      res.status(201).send({ posted_comment: rows[0] });
+    })
+    .catch(next);
 };

@@ -43,5 +43,20 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "adding comments to DB if comment has body, username and user existing in DB. If success responds with posted comment",
+    "queries": ["article_id", "username", "body"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "comment_id": 19,
+          "body": "Hi There",
+          "article_id": 4,
+          "author": "rogersop",
+          "votes": 0
+        }
+      ]
+    }
   }
 }
