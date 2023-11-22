@@ -8,6 +8,7 @@ const {
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
   postCommentToDb,
+  deleteFromDb,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -107,6 +108,18 @@ exports.postNewComment = (req, res, next) => {
     .catch(next);
 };
 
-exports.deleteComment = () => {
-  console.log("DEL");
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  const deletingInfo = {
+    table_name: "comments",
+    id: comment_id,
+    column: "comment_id",
+  };
+  deleteFromDb(deletingInfo)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
