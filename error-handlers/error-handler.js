@@ -14,7 +14,6 @@ exports.psql_errors = (err, req, res, next) => {
 };
 
 exports.custom_errors = (err, req, res, next) => {
-  console.log("CUSTOM");
   if (err.msg && err.code) {
     res.status(err.code).send({ msg: err.msg });
   } else {

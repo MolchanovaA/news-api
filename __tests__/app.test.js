@@ -278,7 +278,7 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
       });
   });
 });
-describe.only("Task 9. DELETE /api/comments/:comment_id", () => {
+describe("Task 9. DELETE /api/comments/:comment_id", () => {
   test("DELETE comment by comment_id and return nothing", () => {
     return request(app)
       .delete("/api/comments/1")
