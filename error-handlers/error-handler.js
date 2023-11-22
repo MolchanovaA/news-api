@@ -22,6 +22,5 @@ exports.custom_errors = (err, req, res, next) => {
 };
 
 exports.other_errors = (err, req, res, next) => {
-  // console.log(err);
   res.status(500).send({ msg: "something went wrong" });
 };

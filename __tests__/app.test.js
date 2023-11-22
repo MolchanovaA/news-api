@@ -10,6 +10,8 @@ const {
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const { expect } = require("@jest/globals");
+const { describe } = require("yargs");
+const { default: test } = require("node:test");
 
 beforeEach(() => {
   return seed({ articleData, commentData, topicData, userData }).then(() => {});
@@ -277,4 +279,7 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
         expect(typeof body.posted_comment.created_at).toBe("string");
       });
   });
+});
+xdescribe("Task 9, /api/comments/:comment_id", () => {
+  test("DELETE");
 });

@@ -106,3 +106,7 @@ exports.postNewComment = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.deleteComment = () => {
+  console.log("DEL");
+};
