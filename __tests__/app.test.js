@@ -124,6 +124,22 @@ describe("task 4. /api/articles/:article_id", () => {
   });
 });
 
+describe("/api/articles", () => {
+  test("GET 200. should return an array of all articles, sorted by DESC (earliest if the first), has no body as property", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles.length).toBe(articleData.length);
+        expect(articles).toBeSorted("created_at", { descending: true });
+        articles.forEach((article) => {
+          expect(article).not.toHaveProperty("body");
+          expect(article).toHaveProperty("comment_count");
+        });
+      });
+  });
+});
+
 describe("/api/articles/:article_id/comments", () => {
   test("GET 200, returns array of comments of passed as article_id article", () => {
     return request(app)

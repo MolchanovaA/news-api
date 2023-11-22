@@ -2,9 +2,11 @@ const express = require("express");
 const {
   getAllTopics,
   getAvailableEndpoints,
+  getAllArticles,
   getArticleById,
   getArticleAndItsComments,
 } = require("./controllers/news.controller");
+
 const {
   error_handler,
   handle_all_errors,
@@ -15,6 +17,8 @@ app.get("/api/topics", getAllTopics);
 app.get("/api", getAvailableEndpoints);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getArticleAndItsComments);
+
+app.get("/api/articles", getAllArticles);
 
 app.all("*", error_handler);
 app.use(handle_all_errors);
