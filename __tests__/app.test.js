@@ -180,3 +180,101 @@ describe("Task 6 /api/articles/:article_id/comments", () => {
       });
   });
 });
+xdescribe("task 7. POST /api/articles/:article_id/comments", () => {
+  test("POST 201. returns comment that has been posted", () => {
+    const postBody = {
+      username: "rogersop",
+      body: "Hi There",
+    };
+    const outputComment = {
+      comment_id: 19,
+      body: "Hi There",
+      article_id: 4,
+      author: "rogersop",
+      votes: 0,
+    };
+    return request(app)
+      .post("/api/articles/4/comments")
+      .send(postBody)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.posted_comment).toMatchObject(outputComment);
+        expect(typeof body.posted_comment.created_at).toBe("string");
+      });
+  });
+  test("POST 400. if comment doesn't have user / body", () => {
+    const postBody = {
+      username: "rogersop",
+    };
+
+    return request(app)
+      .post("/api/articles/4/comments")
+      .send(postBody)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("POST 404 if user doesn't exist", () => {
+    const postBody = {
+      username: "not_registered",
+      body: "Hi There",
+    };
+
+    return request(app)
+      .post("/api/articles/4/comments")
+      .send(postBody)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
+      });
+  });
+  test("POST 400 bad article_id", () => {
+    const postBody = {
+      username: "rogersop",
+      body: "Hi There",
+    };
+    return request(app)
+      .post("/api/articles/bad_art_id/comments")
+      .send(postBody)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("Status 404: valid article_id that doesn't exist e.g. 683", () => {
+    const postBody = {
+      username: "rogersop",
+      body: "Hi There",
+    };
+    return request(app)
+      .post("/api/articles/444/comments")
+      .send(postBody)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
+      });
+  });
+  test("Status 201: Ignores extra unnecessary keys on request body", () => {
+    const postBody = {
+      username: "rogersop",
+      body: "Hi There",
+      additionalKey: "info",
+    };
+    const outputComment = {
+      comment_id: 19,
+      body: "Hi There",
+      article_id: 4,
+      author: "rogersop",
+      votes: 0,
+    };
+    return request(app)
+      .post("/api/articles/4/comments")
+      .send(postBody)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.posted_comment).toMatchObject(outputComment);
+        expect(typeof body.posted_comment.created_at).toBe("string");
+      });
+  });
+});
