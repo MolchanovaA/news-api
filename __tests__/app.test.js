@@ -143,7 +143,7 @@ describe("task 5 /api/articles", () => {
   });
 });
 
-describe("task 6 /api/articles/:article_id/comments", () => {
+describe("Task 6 /api/articles/:article_id/comments", () => {
   test("GET 200, returns array of comments of passed as article_id article", () => {
     return request(app)
       .get("/api/articles/1/comments")

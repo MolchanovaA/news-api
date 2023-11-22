@@ -1,4 +1,3 @@
-const { error } = require("console");
 const db = require("../db/connection");
 const fs = require("fs/promises");
 
@@ -33,30 +32,23 @@ exports.writeEndpoints = (endpoints) => {
 exports.selectArticleById = (id) => {
   let queryStr = `SELECT * FROM articles WHERE article_id =$1`;
 
-  return db
-    .query(queryStr, [id])
-    .then((data) => {
-      if (!data.rows.length) {
-        return Promise.reject({ msg: "not found" });
-      }
-      return data.rows;
-    })
-    .catch((err) => {
-      throw err;
-    });
+  return db.query(queryStr, [id]).then((data) => {
+    if (!data.rows.length) {
+      return Promise.reject({ code: 404, msg: "not found" });
+    }
+    return data.rows;
+  });
 };
 
 exports.selectCommentsByArticleId = (id) => {
   const queryStr = `SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id =$1 ORDER BY created_at DESC`;
 
-  return db
-    .query(queryStr, [id])
-    .then((data) => {
-      return data.rows;
-    })
-    .catch((err) => {
-      throw err;
-    });
+  return db.query(queryStr, [id]).then((data) => {
+    return data.rows;
+  });
+  // .catch((err) => {
+  //   throw err;
+  // });
 };
 
 exports.getArticlesWithCommentCounts = () => {
