@@ -10,6 +10,9 @@ const {
 const {
   error_handler,
   handle_custom_errors,
+  psql_errors,
+  custom_errors,
+  other_errors,
 } = require("./error-handlers/error-handler");
 const app = express();
 app.use(express.json());
@@ -23,5 +26,7 @@ app.get("/api/articles", getAllArticles);
 app.post("/api/articles/:article_id/comments", postNewComment);
 
 app.all("*", error_handler);
-app.use(handle_custom_errors);
+app.use(psql_errors);
+app.use(custom_errors);
+app.use(other_errors);
 module.exports = app;
