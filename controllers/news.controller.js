@@ -83,3 +83,24 @@ exports.getAllArticles = (req, res, next) => {
     res.status(200).send({ articles: rows });
   });
 };
+
+exports.postNewComment = (req, res, next) => {
+  if (!req.body.username || !req.body.body) {
+    return res.status(400).send({ msg: "bad request" });
+  }
+  const { article_id } = req.params;
+  const date = Date.now();
+  const commentToPost = [
+    req.body.body,
+    req.body.username,
+    article_id,
+    0,
+    new Date(date),
+  ];
+
+  postCommentToDb(commentToPost)
+    .then(({ rows }) => {
+      res.status(201).send({ posted_comment: rows[0] });
+    })
+    .catch(next);
+};
