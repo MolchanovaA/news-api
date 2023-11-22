@@ -4,7 +4,6 @@ const {
   toAddEndpointsInfo,
   writeEndpoints,
   selectArticleById,
-  getAllCommentsByArticle,
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
   postCommentToDb,
@@ -12,8 +11,8 @@ const {
 
 exports.getAllTopics = (req, res) => {
   const table = "topics";
-  receiveAll(table).then((topics) => {
-    res.status(200).send({ topics: topics });
+  receiveAll(table).then((data) => {
+    res.status(200).send({ [table]: data });
   });
 };
 
@@ -105,4 +104,18 @@ exports.postNewComment = (req, res, next) => {
       res.status(201).send({ posted_comment: rows[0] });
     })
     .catch(next);
+};
+
+exports.getAllUsers = (req, res) => {
+  const table = "users";
+  receiveAll(table).then((data) => {
+    data.forEach(item =>{
+      if(!item.username || !item.name || !item.avatar_url){
+        return Promise.reject({code: 404, msg: 'not found'})
+      }
+    })
+    res.status(200).send({ [table]: data });
+  }).catch(err=>{
+    next(err)
+  });
 };

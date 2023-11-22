@@ -6,11 +6,11 @@ const {
   getArticleById,
   getArticleAndItsComments,
   postNewComment,
+  getAllUsers,
 } = require("./controllers/news.controller");
 
 const {
   error_handler,
-
   psql_errors,
   custom_errors,
   other_errors,
@@ -25,6 +25,7 @@ app.get("/api/articles", getAllArticles);
 app.get("/api/articles/:article_id/comments", getArticleAndItsComments);
 
 app.post("/api/articles/:article_id/comments", postNewComment);
+app.get("/api/users", getAllUsers);
 
 app.all("*", error_handler);
 

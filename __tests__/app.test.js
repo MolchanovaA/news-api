@@ -278,3 +278,18 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe.only("Task 10 GET /api/users", () => {
+  test("GET /api/users. gets array of all users. each user must have username, name, avatar_url", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body: { users } }) => {
+        expect(users.length).toBe(userData.length);
+        users.forEach((user) => {
+          expect(user).toHaveProperty("username");
+          expect(user).toHaveProperty("name");
+          expect(user).toHaveProperty("avatar_url");
+        });
+      });
+  });
+});
