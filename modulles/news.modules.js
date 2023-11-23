@@ -67,8 +67,8 @@ exports.postCommentToDb = (comment) => {
   return db.query(format(queryStr, [comment]));
 };
 
-exports.deleteFromDb = ({ table_name, column, id }) => {
-  const queryPsql = `DELETE FROM ${table_name} WHERE ${column} = $1 RETURNING*;`;
+exports.deleteFromDb = (id) => {
+  const queryPsql = `DELETE FROM comments WHERE comment_id = $1 RETURNING*;`;
   return db.query(queryPsql, [id]).then(({ rows }) => {
     if (!rows.length) {
       return Promise.reject({ code: 404, msg: "not found" });

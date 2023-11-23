@@ -110,12 +110,8 @@ exports.postNewComment = (req, res, next) => {
 
 exports.deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
-  const deletingInfo = {
-    table_name: "comments",
-    id: comment_id,
-    column: "comment_id",
-  };
-  deleteFromDb(deletingInfo)
+
+  deleteFromDb(comment_id)
     .then(() => {
       res.status(204).send();
     })
