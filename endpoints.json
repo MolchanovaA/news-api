@@ -80,5 +80,18 @@
     "description": "delete the given comment by comment_id",
     "queries": ["commeny_id"],
     "exampleResponse": {}
+  },
+  "GET /api/users": {
+    "description": " gets array of all users. each user must have username, name, avatar_url",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "icellusedkars",
+          "name": "sam",
+          "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
+        }
+      ]
+    }
   }
 }

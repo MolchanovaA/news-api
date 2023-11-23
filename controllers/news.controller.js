@@ -14,8 +14,8 @@ const {
 
 exports.getAllTopics = (req, res) => {
   const table = "topics";
-  receiveAll(table).then((topics) => {
-    res.status(200).send({ topics: topics });
+  receiveAll(table).then((data) => {
+    res.status(200).send({ [table]: data });
   });
 };
 
@@ -136,6 +136,17 @@ exports.deleteComment = (req, res, next) => {
   deleteCommentById(comment_id)
     .then(() => {
       res.status(204).send();
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getAllUsers = (req, res) => {
+  const table = "users";
+  receiveAll(table)
+    .then((data) => {
+      res.status(200).send({ [table]: data });
     })
     .catch((err) => {
       next(err);
