@@ -8,6 +8,7 @@ const {
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
   postCommentToDb,
+  getArticleByIdDB,
   patchToDb,
   deleteCommentById,
 } = require("../modulles/news.modules");
@@ -62,7 +63,7 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
 
-  getArticlesWithCommentCounts(article_id)
+  getArticleByIdDB(article_id)
     .then((rows) => {
       res.status(200).send({ article: rows[0] });
     })
@@ -74,7 +75,6 @@ exports.getArticleById = (req, res, next) => {
 exports.getArticleAndItsComments = (req, res, next) => {
   const { article_id } = req.params;
   const ifArticleExists = selectArticleById(article_id);
-
   const commentsFromArticle = selectCommentsByArticleId(article_id);
 
   Promise.all([ifArticleExists, commentsFromArticle])
@@ -85,9 +85,24 @@ exports.getArticleAndItsComments = (req, res, next) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-  getArticlesWithCommentCounts().then((rows) => {
-    res.status(200).send({ articles: rows });
-  });
+  const query = req.query;
+  const queriesEntries = Object.entries(query);
+  const promises = [];
+  const pendingArticles = getArticlesWithCommentCounts(queriesEntries);
+  promises.push(pendingArticles);
+
+  if (queriesEntries.length) {
+    const ifTopicExists = receiveAll("topics", queriesEntries);
+    promises.push(ifTopicExists);
+  }
+
+  Promise.all(promises)
+    .then(([articleCheck, topicCheck]) => {
+      res.status(200).send({ articles: articleCheck });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.postNewComment = (req, res, next) => {
