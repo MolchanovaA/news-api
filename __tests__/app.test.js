@@ -278,7 +278,7 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
       });
   });
 });
-describe.only("Task 10 GET /api/users", () => {
+describe("Task 10 GET /api/users", () => {
   test("GET /api/users. gets array of all users. each user must have username, name, avatar_url", () => {
     return request(app)
       .get("/api/users")
