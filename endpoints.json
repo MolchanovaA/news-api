@@ -59,6 +59,23 @@
       ]
     }
   },
+  "PATCH /api/articles/:article_id": {
+    "description": "update an article by article_id. Requests an object in the form { inc_votes: newVote }.",
+    "queries": ["article_id"],
+    "exampleResponse": {
+      "article": [
+        {
+          "title": "Living in the shadow of a great man",
+          "topic": "mitch",
+          "author": "butter_bridge",
+          "body": "I find this existence challenging",
+
+          "votes": 105,
+          "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+        }
+      ]
+    }
+  },
   "DELETE /api/comments/:comment_id": {
     "description": "delete the given comment by comment_id",
     "queries": ["commeny_id"],

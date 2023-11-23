@@ -1,13 +1,14 @@
+const { response } = require("../app");
 const {
   receiveAll,
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
   selectArticleById,
-  getAllCommentsByArticle,
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
   postCommentToDb,
+  patchToDb,
   deleteCommentById,
 } = require("../modulles/news.modules");
 
@@ -106,6 +107,27 @@ exports.postNewComment = (req, res, next) => {
       res.status(201).send({ posted_comment: rows[0] });
     })
     .catch(next);
+};
+
+exports.patchArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+  selectArticleById(article_id)
+    .then((article) => {
+      const infoToPath = {
+        table_name: "articles",
+        column: "article_id",
+        title: "votes",
+        newValue: +article[0].votes + inc_votes,
+        article_id: article_id,
+      };
+
+      return patchToDb(infoToPath);
+    })
+    .then(({ rows }) => {
+      res.status(200).send({ article: rows[0] });
+    })
+    .catch((err) => next(err));
 };
 
 exports.deleteComment = (req, res, next) => {
