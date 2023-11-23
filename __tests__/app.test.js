@@ -131,7 +131,6 @@ describe("task 5 /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
-        // console.log(articles, "TEST 5");
         expect(articles.length).toBe(articleData.length);
         expect(articles).toBeSortedBy("created_at", {
           descending: true,
@@ -408,6 +407,14 @@ describe("GET /api/articles (topic query)", () => {
           expect(article.topic).toBe("mitch");
         });
         expect(articles.length).toBe(12);
+      });
+  });
+  test("GET 200. return empty [] with provided topic with has no articles", () => {
+    return request(app)
+      .get("/api/articles?topics=paper")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toEqual([]);
       });
   });
   test("GET 404 if no such topic exists", () => {

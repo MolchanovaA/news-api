@@ -2,8 +2,16 @@ const db = require("../db/connection");
 const fs = require("fs/promises");
 const format = require("pg-format");
 
-exports.receiveAll = (tableName) => {
-  return db.query(`SELECT * FROM ${tableName};`).then(({ rows }) => {
+exports.receiveAll = (tableName, query) => {
+  let psqlStr = `SELECT * FROM ${tableName}`;
+  const formattedInfo = [];
+  if (query) {
+    formattedInfo.push(query[0][1]);
+    psqlStr += " WHERE slug = $1 ";
+  }
+  psqlStr += ";";
+  return db.query(psqlStr, formattedInfo).then(({ rows }) => {
+    if (!rows.length) return Promise.reject({ code: 404, msg: "not found" });
     return rows;
   });
 };
@@ -49,7 +57,7 @@ exports.selectCommentsByArticleId = (id) => {
   });
 };
 
-exports.getArticlesWithCommentCounts = (queries) => {
+exports.getArticlesWithCommentCounts = (queriesEntries) => {
   let psqlStr = `SELECT articles.article_id, articles.author , articles.title, articles.topic,
     articles.created_at, articles.votes, articles.article_img_url
     , COUNT(comments.comment_id) as comment_count
@@ -57,11 +65,10 @@ FROM articles
 FULL JOIN comments
 ON articles.article_id = comments.article_id 
 `;
-  const queriesKeys = Object.keys(queries);
   const additionalInfo = [];
 
-  if (queriesKeys.length) {
-    additionalInfo.push(queries[queriesKeys[0]]);
+  if (queriesEntries.length) {
+    additionalInfo.push(queriesEntries[0][1]);
     psqlStr = `SELECT articles.article_id, articles.author , articles.title, articles.topic,
     articles.created_at, articles.votes, articles.article_img_url
     , COUNT(comments.comment_id) as comment_count
@@ -75,7 +82,6 @@ WHERE articles.topic = $1`;
 GROUP BY articles.article_id ORDER BY articles.created_at DESC;`;
 
   return db.query(psqlStr, additionalInfo).then(({ rows }) => {
-    if (!rows.length) return Promise.reject({ code: 404, msg: "not found" });
     return rows;
   });
 };
@@ -96,7 +102,6 @@ exports.deleteCommentById = (id) => {
 };
 
 exports.patchToDb = ({ table_name, title, newValue, article_id, column }) => {
-  // console.log(table_name, title, newValue, article_id, "jj");
   const queryPsql = `UPDATE ${table_name} SET ${title} = $1 WHERE ${column} = $2 RETURNING *;`;
 
   return db.query(queryPsql, [newValue, article_id]);
