@@ -4,14 +4,13 @@ const {
   receiveAllEndpoints,
   toAddEndpointsInfo,
   writeEndpoints,
-  selectArticleById,
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
   postCommentToDb,
   getArticleByIdDB,
   patchToDb,
   deleteCommentById,
-} = require("../modulles/news.modules");
+} = require("../modules/news.modules");
 
 exports.getAllTopics = (req, res) => {
   const table = "topics";
@@ -74,7 +73,7 @@ exports.getArticleById = (req, res, next) => {
 
 exports.getArticleAndItsComments = (req, res, next) => {
   const { article_id } = req.params;
-  const ifArticleExists = selectArticleById(article_id);
+  const ifArticleExists = getArticleByIdDB(article_id);
   const commentsFromArticle = selectCommentsByArticleId(article_id);
 
   Promise.all([ifArticleExists, commentsFromArticle])
@@ -130,7 +129,7 @@ exports.postNewComment = (req, res, next) => {
 exports.patchArticle = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
-  selectArticleById(article_id)
+  getArticleByIdDB(article_id)
     .then((article) => {
       const infoToPath = {
         table_name: "articles",
