@@ -66,3 +66,10 @@ exports.postCommentToDb = (comment) => {
     "INSERT INTO comments (body, author, article_id, votes, created_at) VALUES %L  RETURNING *;";
   return db.query(format(queryStr, [comment]));
 };
+
+exports.patchToDb = ({ table_name, title, newValue, article_id, column }) => {
+  // console.log(table_name, title, newValue, article_id, "jj");
+  const queryPsql = `UPDATE ${table_name} SET ${title} = $1 WHERE ${column} = $2 RETURNING *;`;
+
+  return db.query(queryPsql, [newValue, article_id]);
+};
