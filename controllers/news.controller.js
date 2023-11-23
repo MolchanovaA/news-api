@@ -8,6 +8,7 @@ const {
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
   postCommentToDb,
+  getArticleByIdDB,
   patchToDb,
   deleteCommentById,
 } = require("../modulles/news.modules");
@@ -61,11 +62,14 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  selectArticleById(article_id)
+
+  getArticleByIdDB(article_id)
     .then((rows) => {
       res.status(200).send({ article: rows[0] });
     })
-    .catch(next);
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getArticleAndItsComments = (req, res, next) => {

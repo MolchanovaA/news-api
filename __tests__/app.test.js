@@ -404,7 +404,6 @@ describe("Task 11 GET /api/articles (topic query)", () => {
       .get("/api/articles?topics=mitch")
       .expect(200)
       .then(({ body: { articles } }) => {
-        console.log(articles, "ART");
         articles.forEach((article) => {
           expect(article.topic).toBe("mitch");
           expect(article).toHaveProperty("article_id");
@@ -432,6 +431,16 @@ describe("Task 11 GET /api/articles (topic query)", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("not found");
+      });
+  });
+});
+describe("TASK 12 GET /api/articles/:article_id (comment_count)", () => {
+  test("should return obj with includes comment_count property", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.comment_count).toBe("11");
       });
   });
 });
