@@ -7,6 +7,7 @@ const {
   getArticleAndItsComments,
   postNewComment,
   patchArticle,
+  deleteComment,
 } = require("./controllers/news.controller");
 
 const {
@@ -27,7 +28,7 @@ app.get("/api/articles/:article_id/comments", getArticleAndItsComments);
 
 app.post("/api/articles/:article_id/comments", postNewComment);
 app.patch("/api/articles/:article_id", patchArticle);
-
+app.delete("/api/comments/:comment_id", deleteComment);
 app.all("*", error_handler);
 
 app.use(psql_errors);

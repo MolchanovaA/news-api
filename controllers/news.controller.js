@@ -9,6 +9,7 @@ const {
   getArticlesWithCommentCounts,
   postCommentToDb,
   patchToDb,
+  deleteCommentById,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -127,4 +128,16 @@ exports.patchArticle = (req, res, next) => {
       res.status(200).send({ article: rows[0] });
     })
     .catch((err) => next(err));
+};
+
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+
+  deleteCommentById(comment_id)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

@@ -67,6 +67,15 @@ exports.postCommentToDb = (comment) => {
   return db.query(format(queryStr, [comment]));
 };
 
+exports.deleteCommentById = (id) => {
+  const queryPsql = `DELETE FROM comments WHERE comment_id = $1 RETURNING*;`;
+  return db.query(queryPsql, [id]).then(({ rows }) => {
+    if (!rows.length) {
+      return Promise.reject({ code: 404, msg: "not found" });
+    }
+  });
+};
+
 exports.patchToDb = ({ table_name, title, newValue, article_id, column }) => {
   // console.log(table_name, title, newValue, article_id, "jj");
   const queryPsql = `UPDATE ${table_name} SET ${title} = $1 WHERE ${column} = $2 RETURNING *;`;

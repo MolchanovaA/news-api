@@ -355,3 +355,29 @@ describe("Task 8 /api/articles/:article_id, update an article by id", () => {
       });
   });
 });
+describe("Task 9. DELETE /api/comments/:comment_id", () => {
+  test("DELETE comment by comment_id and return nothing", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("DELETE 404 if comment with such id is not exists", () => {
+    return request(app)
+      .delete("/api/comments/1000")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
+      });
+  });
+  test("DELETE 400 if comment_id is not a number", () => {
+    return request(app)
+      .delete("/api/comments/not_correct")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+});
