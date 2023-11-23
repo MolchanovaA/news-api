@@ -49,18 +49,37 @@ exports.selectCommentsByArticleId = (id) => {
   });
 };
 
-exports.getArticlesWithCommentCounts = () => {
-  return db.query(
-    `SELECT articles.article_id, articles.author , articles.title, articles.topic,
+exports.getArticlesWithCommentCounts = (queries) => {
+  let psqlStr = `SELECT articles.article_id, articles.author , articles.title, articles.topic,
+    articles.created_at, articles.votes, articles.article_img_url
+    , COUNT(comments.comment_id) as comment_count
+FROM articles
+FULL JOIN comments
+ON articles.article_id = comments.article_id 
+`;
+  const queriesKeys = Object.keys(queries);
+  const additionalInfo = [];
+
+  if (queriesKeys.length) {
+    additionalInfo.push(queries[queriesKeys[0]]);
+    psqlStr = `SELECT articles.article_id, articles.author , articles.title, articles.topic,
     articles.created_at, articles.votes, articles.article_img_url
     , COUNT(comments.comment_id) as comment_count
 FROM articles
 FULL JOIN comments
 ON articles.article_id = comments.article_id
-GROUP BY articles.article_id ORDER BY articles.created_at DESC;
-`
-  );
+WHERE articles.topic = $1`;
+  }
+
+  psqlStr += `
+GROUP BY articles.article_id ORDER BY articles.created_at DESC;`;
+
+  return db.query(psqlStr, additionalInfo).then(({ rows }) => {
+    if (!rows.length) return Promise.reject({ code: 404, msg: "not found" });
+    return rows;
+  });
 };
+
 exports.postCommentToDb = (comment) => {
   const queryStr =
     "INSERT INTO comments (body, author, article_id, votes, created_at) VALUES %L  RETURNING *;";

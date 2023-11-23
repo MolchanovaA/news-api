@@ -131,6 +131,7 @@ describe("task 5 /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
+        // console.log(articles, "TEST 5");
         expect(articles.length).toBe(articleData.length);
         expect(articles).toBeSortedBy("created_at", {
           descending: true,
@@ -393,6 +394,28 @@ describe("Task 10 GET /api/users", () => {
           expect(user).toHaveProperty("name");
           expect(user).toHaveProperty("avatar_url");
         });
+      });
+  });
+});
+
+describe("GET /api/articles (topic query)", () => {
+  test("GET 200. return array of articles with provided topic", () => {
+    return request(app)
+      .get("/api/articles?topics=mitch")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        articles.forEach((article) => {
+          expect(article.topic).toBe("mitch");
+        });
+        expect(articles.length).toBe(12);
+      });
+  });
+  test("GET 404 if no such topic exists", () => {
+    return request(app)
+      .get("/api/articles?topics=not_existing")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
       });
   });
 });

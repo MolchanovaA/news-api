@@ -82,9 +82,14 @@ exports.getArticleAndItsComments = (req, res, next) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-  getArticlesWithCommentCounts().then(({ rows }) => {
-    res.status(200).send({ articles: rows });
-  });
+  const query = req.query;
+  getArticlesWithCommentCounts(query)
+    .then((rows) => {
+      res.status(200).send({ articles: rows });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.postNewComment = (req, res, next) => {
