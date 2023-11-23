@@ -296,10 +296,9 @@ describe("Task 8 /api/articles/:article_id, update an article by id", () => {
     return request(app)
       .patch("/api/articles/1")
       .send(changesToArticle)
-      .expect(201)
+      .expect(200)
       .then(({ body: { article } }) => {
         expect(article).toMatchObject(output);
-        expect(article.votes).toBe(output.votes);
       });
   });
 
@@ -318,7 +317,7 @@ describe("Task 8 /api/articles/:article_id, update an article by id", () => {
     return request(app)
       .patch("/api/articles/1")
       .send(changesToArticle)
-      .expect(201)
+      .expect(200)
       .then(({ body: { article } }) => {
         expect(article).toMatchObject(output);
         expect(article.votes).toBe(output.votes);

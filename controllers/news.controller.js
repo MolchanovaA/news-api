@@ -108,7 +108,7 @@ exports.postNewComment = (req, res, next) => {
     .catch(next);
 };
 
-exports.pathArticle = (req, res, next) => {
+exports.patchArticle = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
   selectArticleById(article_id)
@@ -124,7 +124,7 @@ exports.pathArticle = (req, res, next) => {
       return patchToDb(infoToPath);
     })
     .then(({ rows }) => {
-      res.status(201).send({ article: rows[0] });
+      res.status(200).send({ article: rows[0] });
     })
     .catch((err) => next(err));
 };
