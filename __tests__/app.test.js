@@ -404,7 +404,6 @@ describe("Task 11 GET /api/articles (topic query)", () => {
       .get("/api/articles?topics=mitch")
       .expect(200)
       .then(({ body: { articles } }) => {
-        console.log(articles, "ART");
         articles.forEach((article) => {
           expect(article.topic).toBe("mitch");
           expect(article).toHaveProperty("article_id");
