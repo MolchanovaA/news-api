@@ -8,7 +8,7 @@ const {
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
   postCommentToDb,
-  deleteFromDb,
+  deleteCommentById,
 } = require("../modulles/news.modules");
 
 exports.getAllTopics = (req, res) => {
@@ -111,7 +111,7 @@ exports.postNewComment = (req, res, next) => {
 exports.deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
 
-  deleteFromDb(comment_id)
+  deleteCommentById(comment_id)
     .then(() => {
       res.status(204).send();
     })

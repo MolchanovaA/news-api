@@ -67,7 +67,7 @@ exports.postCommentToDb = (comment) => {
   return db.query(format(queryStr, [comment]));
 };
 
-exports.deleteFromDb = (id) => {
+exports.deleteCommentById = (id) => {
   const queryPsql = `DELETE FROM comments WHERE comment_id = $1 RETURNING*;`;
   return db.query(queryPsql, [id]).then(({ rows }) => {
     if (!rows.length) {
