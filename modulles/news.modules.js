@@ -62,7 +62,7 @@ exports.getArticlesWithCommentCounts = (queriesEntries) => {
     articles.created_at, articles.votes, articles.article_img_url
     , COUNT(comments.comment_id) as comment_count
 FROM articles
-FULL JOIN comments
+LEFT JOIN comments
 ON articles.article_id = comments.article_id 
 `;
   const additionalInfo = [];
@@ -73,7 +73,7 @@ ON articles.article_id = comments.article_id
     articles.created_at, articles.votes, articles.article_img_url
     , COUNT(comments.comment_id) as comment_count
 FROM articles
-FULL JOIN comments
+LEFT JOIN comments
 ON articles.article_id = comments.article_id
 WHERE articles.topic = $1`;
   }

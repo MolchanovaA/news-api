@@ -397,14 +397,23 @@ describe("Task 10 GET /api/users", () => {
   });
 });
 
-describe("GET /api/articles (topic query)", () => {
+describe("Task 11 GET /api/articles (topic query)", () => {
   test("GET 200. return array of articles with provided topic", () => {
+    const article = {};
     return request(app)
       .get("/api/articles?topics=mitch")
       .expect(200)
       .then(({ body: { articles } }) => {
+        console.log(articles, "ART");
         articles.forEach((article) => {
           expect(article.topic).toBe("mitch");
+          expect(article).toHaveProperty("article_id");
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("title");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("article_img_url");
+          expect(article).toHaveProperty("comment_count");
         });
         expect(articles.length).toBe(12);
       });
