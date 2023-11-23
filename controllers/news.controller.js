@@ -108,14 +108,11 @@ exports.postNewComment = (req, res, next) => {
 
 exports.getAllUsers = (req, res) => {
   const table = "users";
-  receiveAll(table).then((data) => {
-    data.forEach(item =>{
-      if(!item.username || !item.name || !item.avatar_url){
-        return Promise.reject({code: 404, msg: 'not found'})
-      }
+  receiveAll(table)
+    .then((data) => {
+      res.status(200).send({ [table]: data });
     })
-    res.status(200).send({ [table]: data });
-  }).catch(err=>{
-    next(err)
-  });
+    .catch((err) => {
+      next(err);
+    });
 };
