@@ -278,6 +278,109 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("Task 8 /api/articles/:article_id, update an article by id", () => {
+  test("PATCH 201, should inc vote property by 5", () => {
+    const changesToArticle = { inc_votes: 5 };
+    const output = {
+      title: "Living in the shadow of a great man",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "I find this existence challenging",
+
+      votes: 105,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+
+    return request(app)
+      .patch("/api/articles/1")
+      .send(changesToArticle)
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toMatchObject(output);
+      });
+  });
+
+  test("PATCH 201, should decr vote property by 105", () => {
+    const changesToArticle = { inc_votes: -105 };
+    const output = {
+      title: "Living in the shadow of a great man",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "I find this existence challenging",
+      votes: -5,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+
+    return request(app)
+      .patch("/api/articles/1")
+      .send(changesToArticle)
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toMatchObject(output);
+        expect(article.votes).toBe(output.votes);
+      });
+  });
+
+  test("PATCH 404 if article is not exist", () => {
+    const changesToArticle = { inc_votes: 5 };
+    return request(app)
+      .patch("/api/articles/1111")
+      .send(changesToArticle)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
+      });
+  });
+  test("PATCH 400 if article id is not correct", () => {
+    const changesToArticle = { inc_votes: 5 };
+    return request(app)
+      .patch("/api/articles/not_correct")
+      .send()
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("PATCH 400 if votes is not number", () => {
+    const changesToArticle = { inc_votes: "not correct number" };
+    return request(app)
+      .patch("/api/articles/not_correct")
+      .send(changesToArticle)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+});
+describe("Task 9. DELETE /api/comments/:comment_id", () => {
+  test("DELETE comment by comment_id and return nothing", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("DELETE 404 if comment with such id is not exists", () => {
+    return request(app)
+      .delete("/api/comments/1000")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
+      });
+  });
+  test("DELETE 400 if comment_id is not a number", () => {
+    return request(app)
+      .delete("/api/comments/not_correct")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+});
 describe("Task 10 GET /api/users", () => {
   test("GET /api/users. gets array of all users. each user must have username, name, avatar_url", () => {
     return request(app)
