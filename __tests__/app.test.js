@@ -402,7 +402,6 @@ describe("TASK 12 GET /api/articles/:article_id (comment_count)", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body: { article } }) => {
-        expect(article).toHaveProperty("comment_count");
         expect(article.comment_count).toBe("11");
       });
   });
