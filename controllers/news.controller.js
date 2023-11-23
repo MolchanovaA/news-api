@@ -61,11 +61,14 @@ const checkPropertiesOfEndpoints = (endpointsObject) => {
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  selectArticleById(article_id)
+
+  getArticlesWithCommentCounts(article_id)
     .then((rows) => {
       res.status(200).send({ article: rows[0] });
     })
-    .catch(next);
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getArticleAndItsComments = (req, res, next) => {
@@ -82,7 +85,7 @@ exports.getArticleAndItsComments = (req, res, next) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-  getArticlesWithCommentCounts().then(({ rows }) => {
+  getArticlesWithCommentCounts().then((rows) => {
     res.status(200).send({ articles: rows });
   });
 };

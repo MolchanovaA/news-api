@@ -95,6 +95,7 @@ describe("task 4. /api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body: { article } }) => {
+        console.log(article, "TEST");
         expect(article.article_id).toBe(article_id_1.article_id);
         expect(article.title).toBe(article_id_1.title);
         expect(article.topic).toBe(article_id_1.topic);
@@ -393,6 +394,16 @@ describe("Task 10 GET /api/users", () => {
           expect(user).toHaveProperty("name");
           expect(user).toHaveProperty("avatar_url");
         });
+      });
+  });
+});
+describe("TASK 12 GET /api/articles/:article_id (comment_count)", () => {
+  test("should return obj with includes comment_count property", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toHaveProperty("comment_count");
       });
   });
 });

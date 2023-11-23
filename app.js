@@ -22,8 +22,8 @@ app.use(express.json());
 
 app.get("/api/topics", getAllTopics);
 app.get("/api", getAvailableEndpoints);
-app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getAllArticles);
+app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getArticleAndItsComments);
 
 app.post("/api/articles/:article_id/comments", postNewComment);

@@ -49,17 +49,36 @@ exports.selectCommentsByArticleId = (id) => {
   });
 };
 
-exports.getArticlesWithCommentCounts = () => {
-  return db.query(
-    `SELECT articles.article_id, articles.author , articles.title, articles.topic,
+exports.getArticlesWithCommentCounts = (id) => {
+  const formattedInfo = [];
+
+  let queryStr = `SELECT articles.article_id, articles.author , articles.title, articles.topic,
     articles.created_at, articles.votes, articles.article_img_url
     , COUNT(comments.comment_id) as comment_count
 FROM articles
 FULL JOIN comments
 ON articles.article_id = comments.article_id
 GROUP BY articles.article_id ORDER BY articles.created_at DESC;
-`
-  );
+`;
+  if (id) {
+    formattedInfo.push(id);
+    queryStr = `SELECT articles.article_id,articles.author , articles.title, articles.topic,
+    articles.created_at, articles.votes, articles.article_img_url, articles.body,
+     COUNT(comments.comment_id ) as comment_count
+FROM articles
+FULL JOIN comments
+ON articles.article_id = comments.article_id
+WHERE articles.article_id = $1
+GROUP BY articles.article_id ORDER BY articles.created_at DESC;
+`;
+  }
+  return db.query(queryStr, formattedInfo).then(({ rows }) => {
+    if (!rows.length) {
+      return Promise.reject({ code: 404, msg: "not found" });
+    }
+
+    return rows;
+  });
 };
 exports.postCommentToDb = (comment) => {
   const queryStr =
