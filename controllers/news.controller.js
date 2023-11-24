@@ -20,24 +20,22 @@ exports.getAllTopics = (req, res) => {
 
 exports.getAvailableEndpoints = (req, res) => {
   receiveAllEndpoints().then((endpoints) => {
-    const parsedListOfEndpoints = JSON.parse(endpoints);
-    const toCorrectPathsIsNeed = checkPropertiesOfEndpoints(
-      parsedListOfEndpoints
-    );
+    // const parsedListOfEndpoints = JSON.parse(endpoints);
+    // const toCorrectPathsIsNeed = checkPropertiesOfEndpoints(
+    //   parsedListOfEndpoints
+    // );
 
-    if (toCorrectPathsIsNeed) {
-      const updatedEndpoints = toAddEndpointsInfo(
-        JSON.parse(endpoints),
-        toCorrectPathsIsNeed
-      );
-      writeEndpoints(updatedEndpoints).then(() => {
-        res
-          .status(200)
-          .send({ listOfEndpoints: JSON.stringify(updatedEndpoints) });
-      });
-    } else {
-      res.status(200).send({ listOfEndpoints: endpoints });
-    }
+    // if (toCorrectPathsIsNeed) {
+    //   const updatedEndpoints = toAddEndpointsInfo(
+    //     JSON.parse(endpoints),
+    //     toCorrectPathsIsNeed
+    //   );
+    //   writeEndpoints(updatedEndpoints).then(() => {
+    //     res.status(200).send({ listOfEndpoints: JSON.parse(updatedEndpoints) });
+    //   });
+    // } else {
+    res.status(200).send({ listOfEndpoints: JSON.parse(endpoints) });
+    // }
   });
 };
 

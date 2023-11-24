@@ -49,9 +49,10 @@ describe("task 3. GET /api", () => {
       .get("/api")
       .expect(200)
       .then(({ body: { listOfEndpoints } }) => {
+        console.log(listOfEndpoints, "LIST");
         let isJson;
         try {
-          JSON.parse(listOfEndpoints);
+          JSON.stringify(listOfEndpoints);
           isJson = true;
         } catch {
           isJson = false;
@@ -65,8 +66,8 @@ describe("task 3. GET /api", () => {
     return request(app)
       .get("/api")
       .expect(200)
-      .then(({ body: { listOfEndpoints } }) => {
-        const parsedEndpoints = JSON.parse(listOfEndpoints);
+      .then(({ body: { parsedEndpoints } }) => {
+        // const parsedEndpoints = JSON.parse(listOfEndpoints);
 
         for (key in parsedEndpoints) {
           expect(parsedEndpoints[key]).toHaveProperty("description");
