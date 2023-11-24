@@ -23,21 +23,6 @@ exports.receiveAllEndpoints = () => {
   });
 };
 
-// exports.toAddEndpointsInfo = (listOfAllEndpoints, corrections) => {
-//   corrections.forEach((endpoint) => {
-//     const path = Object.keys(endpoint)[0];
-//     endpoint[path].forEach((missedProperty) => {
-//       listOfAllEndpoints[path][missedProperty] = "some description";
-//     });
-//   });
-//   return listOfAllEndpoints;
-// };
-
-// exports.writeEndpoints = (endpoints) => {
-//   const endpointsFile = "endpoints.json";
-//   return fs.writeFile(endpointsFile, JSON.stringify(endpoints, null, 2));
-// };
-
 exports.selectCommentsByArticleId = (id) => {
   const queryStr = `SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id =$1 ORDER BY created_at DESC`;
 

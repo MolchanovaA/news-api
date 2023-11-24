@@ -49,7 +49,6 @@ describe("task 3. GET /api", () => {
       .get("/api")
       .expect(200)
       .then(({ body: { listOfEndpoints } }) => {
-        console.log(listOfEndpoints, "LIST");
         let isJson;
         try {
           JSON.stringify(listOfEndpoints);
@@ -67,8 +66,6 @@ describe("task 3. GET /api", () => {
       .get("/api")
       .expect(200)
       .then(({ body: { parsedEndpoints } }) => {
-        // const parsedEndpoints = JSON.parse(listOfEndpoints);
-
         for (key in parsedEndpoints) {
           expect(parsedEndpoints[key]).toHaveProperty("description");
           expect(parsedEndpoints[key]).toHaveProperty("queries");

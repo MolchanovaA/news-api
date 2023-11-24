@@ -1,8 +1,6 @@
 const {
   receiveAll,
   receiveAllEndpoints,
-  toAddEndpointsInfo,
-  writeEndpoints,
   selectCommentsByArticleId,
   getArticlesWithCommentCounts,
   postCommentToDb,
@@ -20,42 +18,8 @@ exports.getAllTopics = (req, res) => {
 
 exports.getAvailableEndpoints = (req, res) => {
   receiveAllEndpoints().then((endpoints) => {
-    // const parsedListOfEndpoints = JSON.parse(endpoints);
-    // const toCorrectPathsIsNeed = checkPropertiesOfEndpoints(
-    //   parsedListOfEndpoints
-    // );
-
-    // if (toCorrectPathsIsNeed) {
-    //   const updatedEndpoints = toAddEndpointsInfo(
-    //     JSON.parse(endpoints),
-    //     toCorrectPathsIsNeed
-    //   );
-    //   writeEndpoints(updatedEndpoints).then(() => {
-    //     res.status(200).send({ listOfEndpoints: JSON.parse(updatedEndpoints) });
-    //   });
-    // } else {
     res.status(200).send({ listOfEndpoints: JSON.parse(endpoints) });
-    // }
   });
-};
-
-const checkPropertiesOfEndpoints = (endpointsObject) => {
-  const necessaryProperties = ["description", "queries", "exampleResponse"];
-  const pathsNeedToUpdate = [];
-
-  for (key in endpointsObject) {
-    const currentPath = {};
-    currentPath[key] = [];
-
-    necessaryProperties.forEach((property) => {
-      if (!endpointsObject[key][property]) {
-        currentPath[key].push(property);
-      }
-    });
-    if (currentPath[key].length) pathsNeedToUpdate.push(currentPath);
-  }
-
-  return !pathsNeedToUpdate.length ? false : pathsNeedToUpdate;
 };
 
 exports.getArticleById = (req, res, next) => {
