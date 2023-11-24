@@ -1,4 +1,3 @@
-const { response } = require("../app");
 const {
   receiveAll,
   receiveAllEndpoints,
@@ -32,7 +31,9 @@ exports.getAvailableEndpoints = (req, res) => {
         toCorrectPathsIsNeed
       );
       writeEndpoints(updatedEndpoints).then(() => {
-        res.status(200).send({ listOfEndpoints: updatedEndpoints });
+        res
+          .status(200)
+          .send({ listOfEndpoints: JSON.stringify(updatedEndpoints) });
       });
     } else {
       res.status(200).send({ listOfEndpoints: endpoints });
