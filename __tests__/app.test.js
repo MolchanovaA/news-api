@@ -139,6 +139,21 @@ describe("task 5 /api/articles", () => {
         });
       });
   });
+  test("GET 200. should return an array of articles with topic mitch, sorted by votes by ASC (earliest if the first)", () => {
+    return request(app)
+      .get("/api/articles?topics=mitch&sorted_by=votes&order_by=asc")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles.length).toBe(12);
+        expect(articles).toBeSortedBy("votes", {
+          descending: false,
+        });
+        articles.forEach((article) => {
+          expect(article).not.toHaveProperty("body");
+          expect(article).toHaveProperty("comment_count");
+        });
+      });
+  });
 });
 
 describe("Task 6 /api/articles/:article_id/comments", () => {
