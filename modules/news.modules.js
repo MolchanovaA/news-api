@@ -60,16 +60,27 @@ LEFT JOIN comments
 ON articles.article_id = comments.article_id 
 `;
   const additionalInfo = [];
+  const allowedQueries = ["created_at", "comment_count", "votes"];
+  const allowedOrder = ["asc", "desc"];
+  const [topic, sorting, order] = queriesEntries;
 
   if (queriesEntries.length) {
-    additionalInfo.push(queriesEntries[0][1]);
+    additionalInfo.push(topic[1]);
     psqlStr += `
-WHERE articles.topic = $1`;
+  WHERE articles.topic = $1`;
   }
-
-  psqlStr += `
-GROUP BY articles.article_id ORDER BY articles.created_at DESC;`;
-
+  if (queriesEntries.length >= 2 && allowedQueries.includes(sorting[1])) {
+    psqlStr += `
+  GROUP BY articles.article_id ORDER BY articles.${sorting[1]}`;
+  } else {
+    psqlStr += `
+      GROUP BY articles.article_id ORDER BY articles.created_at`;
+  }
+  if (queriesEntries.length >= 2 && allowedOrder.includes(order[1])) {
+    psqlStr += ` ${order[1]};`;
+  } else {
+    psqlStr += ` DESC;`;
+  }
   return db.query(psqlStr, additionalInfo).then(({ rows }) => {
     return rows;
   });

@@ -93,6 +93,7 @@ module.exports = [
   {
     title: "Am I a cat?",
     topic: "mitch",
+    votes: 98,
     author: "icellusedkars",
     body: "Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?",
     created_at: 1579126860000,
@@ -102,6 +103,7 @@ module.exports = [
   {
     title: "Moustache",
     topic: "mitch",
+    votes: 70,
     author: "butter_bridge",
     body: "Have you seen the size of that thing?",
     created_at: 1602419040000,
@@ -110,6 +112,7 @@ module.exports = [
   },
   {
     title: "Another article about Mitch",
+    votes: 40,
     topic: "mitch",
     author: "butter_bridge",
     body: "There will never be enough articles about Mitch!",
