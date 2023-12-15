@@ -50,10 +50,10 @@ exports.getAllArticles = (req, res, next) => {
   const query = req.query;
   const queriesEntries = Object.entries(query);
   const promises = [];
-  const pendingArticles = getArticlesWithCommentCounts(queriesEntries);
+  const pendingArticles = getArticlesWithCommentCounts(query);
   promises.push(pendingArticles);
 
-  if (queriesEntries.length) {
+  if (query.topics) {
     const ifTopicExists = receiveAll("topics", queriesEntries);
     promises.push(ifTopicExists);
   }

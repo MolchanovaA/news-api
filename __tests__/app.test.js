@@ -19,7 +19,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe("task 2. GET /api/topics", () => {
+describe("GET /api/topics", () => {
   test("GET 200 /api/topics. Has to return an arr of objs.  The length of topics array should be same as in data file. Each obj has to have description and slug properties", () => {
     return request(app)
       .get("/api/topics")
@@ -43,7 +43,7 @@ describe("task 2. GET /api/topics", () => {
   });
 });
 
-describe("task 3. GET /api", () => {
+describe("GET /api", () => {
   test("GET 200 /api. Has to return a JSON file. Each obj has to have description property", () => {
     return request(app)
       .get("/api")
@@ -75,7 +75,7 @@ describe("task 3. GET /api", () => {
   });
 });
 
-describe("task 4. /api/articles/:article_id", () => {
+describe(" /api/articles/:article_id", () => {
   test("GET 200 article with id = 1", () => {
     const article_id_1 = {
       article_id: 1,
@@ -123,7 +123,7 @@ describe("task 4. /api/articles/:article_id", () => {
   });
 });
 
-describe("task 5 /api/articles", () => {
+describe("/api/articles", () => {
   test("GET 200. should return an array of all articles, sorted by DESC (earliest if the first), has no body as property", () => {
     return request(app)
       .get("/api/articles")
@@ -154,9 +154,20 @@ describe("task 5 /api/articles", () => {
         });
       });
   });
+  test("GET 200. should return an array of All articles, sorted by votes by ASC (earliest if the first)", () => {
+    return request(app)
+      .get("/api/articles?sorted_by=votes&order_by=asc")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles.length).toBe(13);
+        expect(articles).toBeSortedBy("votes", {
+          descending: false,
+        });
+      });
+  });
 });
 
-describe("Task 6 /api/articles/:article_id/comments", () => {
+describe(" /api/articles/:article_id/comments", () => {
   test("GET 200, returns array of comments of passed as article_id article", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -193,7 +204,7 @@ describe("Task 6 /api/articles/:article_id/comments", () => {
       });
   });
 });
-describe("task 7. POST /api/articles/:article_id/comments", () => {
+describe(" POST /api/articles/:article_id/comments", () => {
   test("POST 201. returns comment that has been posted", () => {
     const postBody = {
       username: "rogersop",
@@ -292,7 +303,7 @@ describe("task 7. POST /api/articles/:article_id/comments", () => {
   });
 });
 
-describe("Task 8 /api/articles/:article_id, update an article by id", () => {
+describe("/api/articles/:article_id, update an article by id", () => {
   test("PATCH 201, should inc vote property by 5", () => {
     const changesToArticle = { inc_votes: 5 };
     const output = {
@@ -368,7 +379,7 @@ describe("Task 8 /api/articles/:article_id, update an article by id", () => {
       });
   });
 });
-describe("Task 9. DELETE /api/comments/:comment_id", () => {
+describe(" DELETE /api/comments/:comment_id", () => {
   test("DELETE comment by comment_id and return nothing", () => {
     return request(app)
       .delete("/api/comments/1")
@@ -394,7 +405,7 @@ describe("Task 9. DELETE /api/comments/:comment_id", () => {
       });
   });
 });
-describe("Task 10 GET /api/users", () => {
+describe(" GET /api/users", () => {
   test("GET /api/users. gets array of all users. each user must have username, name, avatar_url", () => {
     return request(app)
       .get("/api/users")
@@ -410,7 +421,7 @@ describe("Task 10 GET /api/users", () => {
   });
 });
 
-describe("Task 11 GET /api/articles (topic query)", () => {
+describe("GET /api/articles (topic query)", () => {
   test("GET 200. return array of articles with provided topic", () => {
     const article = {};
     return request(app)
@@ -447,7 +458,7 @@ describe("Task 11 GET /api/articles (topic query)", () => {
       });
   });
 });
-describe("TASK 12 GET /api/articles/:article_id (comment_count)", () => {
+describe(" GET /api/articles/:article_id (comment_count)", () => {
   test("should return obj with includes comment_count property", () => {
     return request(app)
       .get("/api/articles/1")
